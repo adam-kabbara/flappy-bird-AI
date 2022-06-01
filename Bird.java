@@ -10,6 +10,7 @@ public class Bird extends JComponent{
     int width;
     int rotation;
     Integer score;
+    double fitness; // normilized score
     int pipeScore;
     int jumpPos;
     boolean isJumping;
@@ -31,6 +32,7 @@ public class Bird extends JComponent{
         this.rotatedImage = this.image;
         this.brain = new NeuralNetwork(5, 8, 2);
         this.score = 0;
+        this.fitness = 0.0;
         this.pipeScore = 0;
 
     }
@@ -74,7 +76,7 @@ public class Bird extends JComponent{
           }
         }
         if (closestPipe != null){
-            double [][] inputArray = { // if i change these values the ai changes a LOT
+            double [][] inputArray ={ // if i change these values the ai changes a LOT
                                     {closestPipe.x - this.x + this.rotatedImage.getWidth()}, 
                                     {closestPipe.topY + closestPipe.topHeight - this.y},
                                     {closestPipe.bottomY - this.y - this.rotatedImage.getHeight()},
@@ -82,7 +84,7 @@ public class Bird extends JComponent{
                                     {this.gravity}
                                     };
             Matrix inputs = new Matrix(5, 1);
-            inputs.mapSigmoid(); // normalize inputs 
+            inputs.mapSigmoid(); // normalize inputs
             inputs.matrix = inputArray;
             Matrix action = this.brain.predict(inputs);
             if (action.matrix[0][0] > action.matrix[1][0]){
@@ -92,12 +94,15 @@ public class Bird extends JComponent{
         
     }
 
-    public Bird bread(Bird mate, int x, int y, int width) throws Exception{
+    public Bird[] bread(Bird mate, int x, int y, int width) throws Exception{
         //todo mush parents brains and put it baby
-        Bird baby = new Bird(x, y, width);
-        baby.brain = NeuralNetwork.crossover(this.brain, mate.brain);
-        baby.brain.mutate(0.1);
-        return baby; 
+        Bird [] offspring = {new Bird(x, y, width), new Bird(x, y, width)};
+        NeuralNetwork[] offspringBrains = NeuralNetwork.crossover(this.brain, mate.brain);
+        offspring[0].brain = offspringBrains[0];
+        offspring[1].brain = offspringBrains[1];
+        offspring[0].brain.mutate(0.1, 0.5);
+        offspring[1].brain.mutate(0.1, 0.5);
+        return offspring; 
     }
 
 

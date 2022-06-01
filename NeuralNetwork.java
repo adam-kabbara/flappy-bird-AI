@@ -42,46 +42,43 @@ public class NeuralNetwork {
         return (1/( 1 + Math.pow(Math.E,(-1*x))));
     }
 
-    public static NeuralNetwork crossover(NeuralNetwork dad, NeuralNetwork mom) throws Exception{
+    public static NeuralNetwork[] crossover(NeuralNetwork dad, NeuralNetwork mom) throws Exception{
         // lol this is essentially preforming the crossing over proccess
         Random rand = new Random();
         Matrix[] dadSplit;
         Matrix[] momSplit;
-        int momORdad;
-        NeuralNetwork baby = new NeuralNetwork(dad.inputCount, dad.hiddenCount, dad.outputCount);
+        NeuralNetwork baby1 = new NeuralNetwork(dad.inputCount, dad.hiddenCount, dad.outputCount);
+        NeuralNetwork baby2 = new NeuralNetwork(dad.inputCount, dad.hiddenCount, dad.outputCount);
 
         int cutIH = rand.nextInt(dad.weightsIH.rows);
         int cutHO = rand.nextInt(dad.weightsHO.rows);
 
         // crossover of intput-hidden weights
-        momORdad = rand.nextInt(1); // to increase diversity
         dadSplit = Matrix.transverseCut(dad.weightsIH, cutIH);
         momSplit = Matrix.transverseCut(mom.weightsIH, cutIH);
-        if (momORdad == 0){ 
-            baby.weightsIH = Matrix.combineColumnsMatrices(dadSplit[0], momSplit[1]);
-        }else{
-            baby.weightsIH = Matrix.combineColumnsMatrices(momSplit[0], dadSplit[1]);
-        }
+        baby1.weightsIH = Matrix.combineColumnsMatrices(dadSplit[0], momSplit[1]);
+        baby2.weightsIH = Matrix.combineColumnsMatrices(momSplit[0], dadSplit[1]);
 
         // crossover of hidden-output weights
-        momORdad = rand.nextInt(1); // to increase diversity
         dadSplit = Matrix.transverseCut(dad.weightsHO, cutHO);
         momSplit = Matrix.transverseCut(mom.weightsHO, cutHO);
-        if (momORdad == 0){ 
-            baby.weightsHO = Matrix.combineColumnsMatrices(dadSplit[0], momSplit[1]);
-        }else{
-            baby.weightsHO = Matrix.combineColumnsMatrices(momSplit[0], dadSplit[1]);
-        }
+        baby1.weightsHO = Matrix.combineColumnsMatrices(dadSplit[0], momSplit[1]);
+        baby2.weightsHO = Matrix.combineColumnsMatrices(momSplit[0], dadSplit[1]);
 
-        return baby;
+        return new NeuralNetwork[] {baby1, baby2};
     }
 
     public void mutate(double chance) throws Exception{
         this.weightsIH.mutate(chance);
         this.weightsHO.mutate(chance);
         this.biasI.mutate(chance);
-        this.biasH.mutate(chance);
-        
+        this.biasH.mutate(chance);   
+    }
+    public void mutate(double chance, double rangeOfChange) throws Exception{
+        this.weightsIH.mutate(chance, rangeOfChange);
+        this.weightsHO.mutate(chance, rangeOfChange);
+        this.biasI.mutate(chance, rangeOfChange);
+        this.biasH.mutate(chance, rangeOfChange);   
     }
 
 

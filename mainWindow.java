@@ -9,7 +9,7 @@ class mainWindow extends JComponent{
     private final int BIRD_COUNT = 100; //100
     final int WIDTH = 375;
     final int HEIGHT = 600;
-    final int PAUSE = 10; //40
+    final int PAUSE = 0; //40
     static JFrame frame = new JFrame();
     static Random rand = new Random();
 
@@ -95,8 +95,10 @@ class mainWindow extends JComponent{
                     if (p.x < bird.x && ! p.passed){
                         this.pipes.add(new Pipe(450));
                         p.passed = true;
-                        for (Bird b: this.birds)
+                        for (Bird b: this.birds){
                             b.pipeScore++; 
+                            b.score += 100; // increase fitness if passed a pipe
+                        }
                         if (generationBest < bird.pipeScore){
                             generationBest = bird.pipeScore;
                         }
@@ -122,12 +124,16 @@ class mainWindow extends JComponent{
                     Bird bestBird = new Bird(WIDTH/2, HEIGHT/2, 15);
                     bestBird.brain = this.deadBirds.get(this.deadBirds.size()-1).brain;
                     this.birds.add(bestBird);
-                    for (int i=0; i<this.BIRD_COUNT-1; i++){
+                    for (int i=0; i<this.BIRD_COUNT/2; i++){
                         Bird b1 = pickBirdMate();
                         Bird b2 = pickBirdMate();
-                        Bird baby = b1.bread(b2, WIDTH/2, HEIGHT/2, 15);
-                        this.birds.add(baby);
-                        this.deadBirds.add(baby);
+                        Bird[] offspring = b1.bread(b2, WIDTH/2, HEIGHT/2, 15);
+                        Bird baby1 = offspring[0];
+                        Bird baby2 = offspring[1];
+                        this.birds.add(baby1);
+                        this.deadBirds.add(baby1);
+                        this.birds.add(baby2);
+                        this.deadBirds.add(baby2);
                         // bread best AI's
                     }
                     //this.deadBirds.clear();

@@ -68,6 +68,30 @@ public class Matrix {
             throw new Exception("ERROR: chance has to be between 0.0 and 1.0");
         }
     }
+    public void mutate(double chance, double rangeOfChange) throws Exception{ // chance between 0 and 1
+        // x% chance of mutating an element in the matrix by y values
+        double n;
+        double add;
+        if (chance >= 0 && chance <=1){
+            for (int i=0; i<this.rows; i++){// todo work on thisss
+                for(int j=0; j<this.columns; j++){
+                    n = Math.random();
+                    add = Math.random();
+                    if (n < chance){ //todo check if prbability is correct
+                        if (add >=0.5){
+                            this.matrix[i][j] += Math.random();
+                        }
+                        else{
+                            this.matrix[i][j] -= Math.random();
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            throw new Exception("ERROR: chance has to be between 0.0 and 1.0");
+        }
+    }
 
 
     public static Matrix matrixMultiplication(Matrix m1, Matrix m2) throws Exception{

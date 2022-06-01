@@ -44,7 +44,7 @@ public class Pipe extends JComponent{
     }
 
     private void setHeight(){
-        int gap = 70;
+        int gap = 100; //70
         int height = rand.nextInt(350) + 50;
         this.topY = height - this.topHeight;
         this.bottomY = gap + height;
