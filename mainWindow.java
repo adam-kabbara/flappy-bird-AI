@@ -9,7 +9,7 @@ class mainWindow extends JComponent{
     private final int BIRD_COUNT = 100; //100
     final int WIDTH = 375;
     final int HEIGHT = 600;
-    final int PAUSE = 0; //40
+    final int PAUSE = 2; //40
     static JFrame frame = new JFrame();
     static Random rand = new Random();
 
