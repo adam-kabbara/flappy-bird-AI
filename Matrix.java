@@ -1,6 +1,6 @@
 import java.lang.Math;
 
-public class Matrix {
+public class Matrix implements java.io.Serializable{
     int rows;
     int columns;
     double[][] matrix;

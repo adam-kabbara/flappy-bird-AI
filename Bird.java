@@ -100,10 +100,18 @@ public class Bird extends JComponent{
         NeuralNetwork[] offspringBrains = NeuralNetwork.crossover(this.brain, mate.brain);
         offspring[0].brain = offspringBrains[0];
         offspring[1].brain = offspringBrains[1];
-        offspring[0].brain.mutate(0.1, 0.5);
-        offspring[1].brain.mutate(0.1, 0.5);
+        offspring[0].brain.mutate(0.1, 0.1);
+        offspring[1].brain.mutate(0.1, 0.1);
         return offspring; 
     }
 
+    public static Bird copy(Bird toCopy){
+        Bird birdCopy = new Bird(toCopy.x, toCopy.y, toCopy.width);
+        birdCopy.brain = toCopy.brain;
+        return birdCopy;
+    }
 
+    public static SerializedBird serialize(Bird toSerialize){
+        return new SerializedBird(toSerialize.brain, toSerialize.score);
+    }
 }

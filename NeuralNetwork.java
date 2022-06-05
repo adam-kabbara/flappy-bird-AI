@@ -1,7 +1,7 @@
 // A class for a 3 layered neural network
 import java.util.Random;
 
-public class NeuralNetwork {
+public class NeuralNetwork implements java.io.Serializable{
     int inputCount;
     int hiddenCount;
     int outputCount;
@@ -33,7 +33,7 @@ public class NeuralNetwork {
         Matrix outputMatrix = Matrix.matrixMultiplication(this.weightsHO, hiddenMatrix);
         outputMatrix.add(1.0);
         outputMatrix.mapSigmoid();
-
+        //Matrix.print(outputMatrix);
         return outputMatrix;
         
     }
