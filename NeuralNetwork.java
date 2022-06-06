@@ -7,8 +7,8 @@ public class NeuralNetwork implements java.io.Serializable{
     int outputCount;
     Matrix weightsIH;
     Matrix weightsHO;
-    Matrix biasI;
     Matrix biasH;
+    Matrix biasO;
 
     public NeuralNetwork(int inputCount, int hiddenCount, int outputCount){
         this.inputCount = inputCount;
@@ -16,30 +16,28 @@ public class NeuralNetwork implements java.io.Serializable{
         this.outputCount = outputCount;
         this.weightsIH = new Matrix(this.hiddenCount, this.inputCount);
         this.weightsHO = new Matrix(this.outputCount, this.hiddenCount);
+        this.biasH = new Matrix(this.hiddenCount, 1);
+        this.biasO = new Matrix(this.outputCount, 1);
         this.weightsIH.randomize();
         this.weightsHO.randomize();
-        this.biasI = new Matrix(1, this.inputCount);
-        this.biasH = new Matrix(1, this.hiddenCount);
+        this.biasH.randomize();
+        this.biasO.randomize();
     }
 
     public Matrix predict(Matrix inputMatrix) throws Exception{
         //Multiply input matrix by wights and get hidden matrix
         Matrix hiddenMatrix = Matrix.matrixMultiplication(this.weightsIH, inputMatrix);
         //Add bias to all hidden matrix nodes
-        hiddenMatrix.add(1.0);
+        hiddenMatrix.add(biasH);
         //Apply activation function to make all values btwn 0 and 1
         hiddenMatrix.mapSigmoid();
         //Reapeat process for hidden/output layer weights 
         Matrix outputMatrix = Matrix.matrixMultiplication(this.weightsHO, hiddenMatrix);
-        outputMatrix.add(1.0);
+        outputMatrix.add(biasO);
         outputMatrix.mapSigmoid();
         //Matrix.print(outputMatrix);
         return outputMatrix;
         
-    }
-
-    public double sigmoid(double x){
-        return (1/( 1 + Math.pow(Math.E,(-1*x))));
     }
 
     public static NeuralNetwork[] crossover(NeuralNetwork dad, NeuralNetwork mom) throws Exception{
@@ -71,16 +69,15 @@ public class NeuralNetwork implements java.io.Serializable{
     public void mutate(double chance) throws Exception{
         this.weightsIH.mutate(chance);
         this.weightsHO.mutate(chance);
-        this.biasI.mutate(chance);
-        this.biasH.mutate(chance);   
+        this.biasH.mutate(chance);
+        this.biasO.mutate(chance);   
     }
     public void mutate(double chance, double rangeOfChange) throws Exception{
         this.weightsIH.mutate(chance, rangeOfChange);
         this.weightsHO.mutate(chance, rangeOfChange);
-        this.biasI.mutate(chance, rangeOfChange);
-        this.biasH.mutate(chance, rangeOfChange);   
+        this.biasH.mutate(chance, rangeOfChange);
+        this.biasO.mutate(chance, rangeOfChange);   
     }
-
 
     public static void main(String args[]) throws Exception{
         /*

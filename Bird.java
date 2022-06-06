@@ -28,7 +28,7 @@ public class Bird extends JComponent{
         this.rotation = 0;
         this.jumpPos = this.y;
         this.isJumping = false;
-        this.image = utils.loadImage("sprites\\yellowbird.png");
+        this.image = utils.loadImage("assets\\yellowbird.png");
         this.rotatedImage = this.image;
         this.brain = new NeuralNetwork(5, 8, 2);
         this.score = 0;
@@ -77,10 +77,10 @@ public class Bird extends JComponent{
         }
         if (closestPipe != null){
             double [][] inputArray ={ // if i change these values the ai changes a LOT
+                                    {this.y},
                                     {closestPipe.x - this.x + this.rotatedImage.getWidth()}, 
                                     {closestPipe.topY + closestPipe.topHeight - this.y},
                                     {closestPipe.bottomY - this.y - this.rotatedImage.getHeight()},
-                                    {this.y},
                                     {this.gravity}
                                     };
             Matrix inputs = new Matrix(5, 1);
@@ -95,7 +95,7 @@ public class Bird extends JComponent{
     }
 
     public Bird[] bread(Bird mate, int x, int y, int width) throws Exception{
-        //todo mush parents brains and put it baby
+        // mush parents brains and put it baby
         Bird [] offspring = {new Bird(x, y, width), new Bird(x, y, width)};
         NeuralNetwork[] offspringBrains = NeuralNetwork.crossover(this.brain, mate.brain);
         offspring[0].brain = offspringBrains[0];

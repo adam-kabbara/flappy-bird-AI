@@ -8,6 +8,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowAdapter;
+
 
 import javax.swing.*;
  
@@ -34,7 +38,7 @@ class mainWindow extends JComponent{
 
     public mainWindow() throws IOException{
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT)); // we set the size to gameWindow
-        this.bg = utils.loadImage("sprites\\bg.png");
+        this.bg = utils.loadImage("assets\\bg.png");
         this.bg = utils.scaleImage(this.bg, 1.3, 1.25);
         this.base = new Base(550, 5);
 
@@ -54,10 +58,27 @@ class mainWindow extends JComponent{
 
     public static void main(String[] args) throws Exception {
         mainWindow gameWindow = new mainWindow();
-        frame.add(gameWindow);         
-        frame.pack(); // set frame size to content pane
 
-        frame.setTitle("Snake Game");
+        // ----------------- window listener stuff ----------------
+        WindowListener myWindowListener = new WindowAdapter() {
+            public void windowClosing(WindowEvent evt) {
+                gameWindow.birds.sort((s1, s2) -> s1.score.compareTo(s2.score));
+                if (gameWindow.bestBird.score < gameWindow.birds.get(gameWindow.birds.size()-1).score){
+                    gameWindow.saveBird(gameWindow.birds.get(gameWindow.birds.size()-1), gameWindow.bestBirdFileName);
+                    System.out.println("New best bird has been save!!");
+                }
+                else{
+                    System.out.println("Best bird has greater score than current bird");
+                }        
+            }
+        };
+        // ----------------- done window listener stuff -------------------
+
+        frame.add(gameWindow);
+        frame.addWindowListener(myWindowListener); 
+        frame.pack(); // set frame size to content pane
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setTitle("Flappy Bird AI");
         //frame.setResizable(false); todo
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -87,6 +108,7 @@ class mainWindow extends JComponent{
     private void drawInfo(Graphics g){
         g.setColor(Color.ORANGE);
         g.setFont(new Font("Arial", Font.PLAIN, 20));
+        g.drawString("Population Size: "+this.birds.size(), 0, 60);
         g.drawString("Generation: "+this.generationCount, 0, 15);
         g.drawString("Generation Best: "+this.generationBest, 0, 30);
         g.drawString("All Best: "+this.allBest, 0, 45);
@@ -97,7 +119,10 @@ class mainWindow extends JComponent{
         for (int i=0; i<this.BIRD_COUNT; i++){
             this.birds.add(new Bird(WIDTH/2, HEIGHT/2, 15));
         }
-        //this.birds.add(this.bestBird);
+        //this.birds.add(Bird.copy(this.bestBird));
+        //when the best bird of a "era" is added
+        //to the new "era", it will progress much
+        //much faster than usual
         this.deadBirds = new ArrayList<>(this.birds);
         this.pipes.add(new Pipe(450));
 
@@ -164,6 +189,12 @@ class mainWindow extends JComponent{
 
                     normalizeFitness(this.deadBirds);
                     for (int i=0; i<this.BIRD_COUNT/2; i++){
+                       /* Bird b = poolSelection(this.deadBirds);
+                        Bird newBird = Bird.copy(b);
+                        newBird.x = WIDTH/2; newBird.y = HEIGHT/2;
+                        newBird.brain.mutate(0.5, 0.1);
+                        this.birds.add(newBird);*/
+
                         Bird b1 = poolSelection(this.deadBirds); //pickBirdMate();
                         Bird b2 = poolSelection(this.deadBirds); //pickBirdMate();
                         Bird[] offspring = b1.bread(b2, WIDTH/2, HEIGHT/2, 15);
@@ -171,8 +202,6 @@ class mainWindow extends JComponent{
                         Bird baby2 = offspring[1];
                         this.birds.add(baby1);
                         this.birds.add(baby2);
-                        //this.deadBirds.add(baby1);
-                        //this.deadBirds.add(baby2);
                     }
                     this.deadBirds.clear();
                     this.deadBirds = new ArrayList<>(this.birds);
@@ -226,7 +255,7 @@ class mainWindow extends JComponent{
             out.writeObject(sb);
             out.close();
             fileOut.close();
-            System.out.printf("Serialized data is saved in "+fileName);
+            System.out.println("Serialized data is saved in "+fileName);
          } catch (IOException i) {
             i.printStackTrace();
          }
@@ -302,14 +331,19 @@ class mainWindow extends JComponent{
         // Keep subtracting probabilities until you get less than zero
         // Higher probabilities will be more likely to be fixed since they will
         // subtract a larger number towards zero
-        while (r > 0) {
-            r -= birds.get(index).fitness;
-            // And move on to the next
-            index += 1;
+        try{
+            while (r > 0) {
+                r -= birds.get(index).fitness;
+                // And move on to the next
+                index += 1;
+            }
+        }
+        catch (Exception IndexOutOfBoundsException){
+            return birds.get(rand.nextInt(birds.size() - 1));
         }
       
         // Go back one
-        index -= 1;
+        index --;
       
         return birds.get(index);
     }

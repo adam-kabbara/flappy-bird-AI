@@ -28,6 +28,20 @@ public class Matrix implements java.io.Serializable{
         }
     }
 
+    public void add(Matrix m) throws Exception{
+        // add a const to all elements of a matrix
+        if (this.rows == m.rows && this.columns == m.columns){
+            for (int i=0; i<this.rows; i++){
+                for(int j=0; j<this.columns; j++){
+                    this.matrix[i][j] += m.matrix[i][j];
+                }
+            }
+        }
+        else{
+            throw new Exception("m.matrix has to be the same size as this.matrix");
+        }
+    }
+
     public void add(double n){
         // add a const to all elements of a matrix
         for (int i=0; i<this.rows; i++){

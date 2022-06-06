@@ -24,7 +24,7 @@ public class Pipe extends JComponent{
         this.topHeight = 600;
         this.bottomHeight = 600;
         this.passed = false;
-        this.bottomPipe = utils.loadImage("sprites\\pipe.png");
+        this.bottomPipe = utils.loadImage("assets\\pipe.png");
         this.bottomPipe = utils.scaleImage(this.bottomPipe, 1, 1.75);
         this.topPipe = utils.rotateImage(this.bottomPipe, 180);
         this.width = this.topPipe.getWidth();
