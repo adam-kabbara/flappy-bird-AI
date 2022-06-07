@@ -5,6 +5,8 @@ This is an attempt at creating an AI to play flappy bird using ```java``` The AI
 
 This project was inspired by [Code Bullet](https://www.youtube.com/watch?v=WSW-5m8lRMs) and [The Coding Train](https://www.youtube.com/watch?v=c6y21FkaUqw)
 
+[Introduction to Genetic Algorithms](https://towardsdatascience.com/introduction-to-genetic-algorithms-including-example-code-e396e98d8bf3) was a great article which helped a lot with developing the genetic algorithm
+
 ## Imports
 
 This project was done mostly from scratch without the use of any external libraries like ```TensorFlow```
