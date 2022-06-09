@@ -12,7 +12,7 @@ class runBestBird extends JComponent{
     // of the animated objecs.
     final int WIDTH = 375;
     final int HEIGHT = 600;
-    final int PAUSE = 40;
+    final int PAUSE = 0;
     static JFrame frame = new JFrame();
 
     Bird bestBird;
@@ -109,7 +109,7 @@ class runBestBird extends JComponent{
 
     private void showLostPopup() {
         System.out.println("Best bird lost");
-        JOptionPane.showMessageDialog(frame, "Best bird lost with a score of "+this.bestBird.pipeScore);
+        JOptionPane.showMessageDialog(frame, "Best bird lost with a score of "+score);
         frame.dispose();
     }
 

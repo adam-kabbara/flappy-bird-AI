@@ -11,15 +11,13 @@ import java.io.ObjectOutputStream;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowAdapter;
-
-
 import javax.swing.*;
  
 class mainWindow extends JComponent{
     private final int BIRD_COUNT = 100; //100
     final int WIDTH = 375;
     final int HEIGHT = 600;
-    final int PAUSE = 40; //40
+    final int PAUSE = 0; //40
     static JFrame frame = new JFrame();
     static Random rand = new Random();
     final String bestBirdFileName = "bestBird.ser";
@@ -47,6 +45,7 @@ class mainWindow extends JComponent{
         if (bb != null){
             this.bestBird = Bird.copy(bb);
             this.bestBird.score = bb.score;
+            this.bestBird.pipeScore = bb.pipeScore;
             System.out.println("Best Bird Found");
             System.out.println(this.bestBird.score);
         }
@@ -108,10 +107,11 @@ class mainWindow extends JComponent{
     private void drawInfo(Graphics g){
         g.setColor(Color.ORANGE);
         g.setFont(new Font("Arial", Font.PLAIN, 20));
-        g.drawString("Population Size: "+this.birds.size(), 0, 60);
         g.drawString("Generation: "+this.generationCount, 0, 15);
-        g.drawString("Generation Best: "+this.generationBest, 0, 30);
-        g.drawString("All Best: "+this.allBest, 0, 45);
+        g.drawString("Population Size: "+this.birds.size(), 0, 30);
+        g.drawString("Generation Best: "+this.generationBest, 0, 45);
+        g.drawString("Era Best: "+this.allBest, 0, 60);
+        g.drawString("All Best: "+this.bestBird.pipeScore, 0, 75);
     }
 
     public void startLearning() throws Exception {
@@ -119,7 +119,7 @@ class mainWindow extends JComponent{
         for (int i=0; i<this.BIRD_COUNT; i++){
             this.birds.add(new Bird(WIDTH/2, HEIGHT/2, 15));
         }
-        //this.birds.add(Bird.copy(this.bestBird));
+        this.birds.add(Bird.copy(this.bestBird));
         //when the best bird of a "era" is added
         //to the new "era", it will progress much
         //much faster than usual
@@ -167,14 +167,13 @@ class mainWindow extends JComponent{
                     this.birds.remove(this.collidedBirds.get(i));
                 }
                 if (this.birds.isEmpty()){
+                    this.deadBirds.sort((s1, s2) -> s1.score.compareTo(s2.score)); //sort dead birds by score
                     this.generationCount++;
                     // keep the best bird in next generation
-                    this.deadBirds.sort((s1, s2) -> s1.score.compareTo(s2.score));
                     Bird genBestBird = Bird.copy(this.deadBirds.get(this.deadBirds.size()-1));
                     this.birds.add(genBestBird);
 
                     // keep best bird mutated in next gen 
-                    this.deadBirds.sort((s1, s2) -> s1.score.compareTo(s2.score));
                     Bird genBestBirdMutated = Bird.copy(this.deadBirds.get(this.deadBirds.size()-1));
                     genBestBirdMutated.brain.mutate(0.1, 0.1);
                     this.birds.add(genBestBirdMutated);
@@ -183,18 +182,13 @@ class mainWindow extends JComponent{
                     if (this.deadBirds.get(this.deadBirds.size()-1).score > this.bestBird.score){
                         this.bestBird = Bird.copy(genBestBird);
                         this.bestBird.score = this.deadBirds.get(this.deadBirds.size()-1).score;
+                        this.bestBird.pipeScore = this.deadBirds.get(this.deadBirds.size()-1).pipeScore;
                         saveBird(this.bestBird, this.bestBirdFileName);
                         System.out.println("saved best bird");
                     }
 
                     normalizeFitness(this.deadBirds);
                     for (int i=0; i<this.BIRD_COUNT/2; i++){
-                       /* Bird b = poolSelection(this.deadBirds);
-                        Bird newBird = Bird.copy(b);
-                        newBird.x = WIDTH/2; newBird.y = HEIGHT/2;
-                        newBird.brain.mutate(0.5, 0.1);
-                        this.birds.add(newBird);*/
-
                         Bird b1 = poolSelection(this.deadBirds); //pickBirdMate();
                         Bird b2 = poolSelection(this.deadBirds); //pickBirdMate();
                         Bird[] offspring = b1.bread(b2, WIDTH/2, HEIGHT/2, 15);
@@ -347,6 +341,4 @@ class mainWindow extends JComponent{
       
         return birds.get(index);
     }
-
-    
 }

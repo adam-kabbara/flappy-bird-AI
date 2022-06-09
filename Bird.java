@@ -83,7 +83,7 @@ public class Bird extends JComponent{
                                     {closestPipe.bottomY - this.y - this.rotatedImage.getHeight()},
                                     {this.gravity}
                                     };
-            Matrix inputs = new Matrix(5, 1);
+            Matrix inputs = new Matrix(inputArray.length, 1);
             inputs.mapSigmoid(); // normalize inputs
             inputs.matrix = inputArray;
             Matrix action = this.brain.predict(inputs);
@@ -112,6 +112,6 @@ public class Bird extends JComponent{
     }
 
     public static SerializedBird serialize(Bird toSerialize){
-        return new SerializedBird(toSerialize.brain, toSerialize.score);
+        return new SerializedBird(toSerialize.brain, toSerialize.score, toSerialize.pipeScore);
     }
 }

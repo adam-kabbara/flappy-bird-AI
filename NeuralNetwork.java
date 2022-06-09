@@ -78,35 +78,4 @@ public class NeuralNetwork implements java.io.Serializable{
         this.biasH.mutate(chance, rangeOfChange);
         this.biasO.mutate(chance, rangeOfChange);   
     }
-
-    public static void main(String args[]) throws Exception{
-        /*
-        NeuralNetwork nn = new NeuralNetwork(5, 8, 2);
-        Matrix.print(nn.weightsIH);
-        nn.weightsIH.mutate(0.05);
-        System.out.println("");
-        Matrix.print(nn.weightsIH);
-
-        System.out.println("\n\n\n");
-
-        // testing out matrix
-        Matrix m1 = new Matrix(2, 3);
-        Matrix m2 = new Matrix(3, 2);
-        double[][] temp1 = {{2,8,3}, {5,4,1}};
-        double[][] temp2 = {{4, 1}, {6,3}, {2, 4}};
-        m1.matrix = temp1;
-        m2.matrix = temp2;
-        Matrix.print(m1);
-        System.out.println("");
-        Matrix.print(m2);
-        System.out.println("");
-        Matrix.print(Matrix.matrixMultiplication(m1, m2));
-        System.out.println("");
-        Matrix.print(m2);
-        System.out.println("");
-        Matrix.print(Matrix.transverseCut(m2, 3)[0]);
-        Matrix.print(Matrix.transverseCut(m2, 3)[1]);
-        */
-        
-    }
 }
