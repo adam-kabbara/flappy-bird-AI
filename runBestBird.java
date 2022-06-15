@@ -4,15 +4,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
-
 import javax.swing.*;
 
-class runBestBird extends JComponent{
+
+public class runBestBird extends JComponent{
     // Instance variables that define the current characteristics
     // of the animated objecs.
     final int WIDTH = 375;
     final int HEIGHT = 600;
-    final int PAUSE = 0;
+    final int PAUSE = 20;
     static JFrame frame = new JFrame();
 
     Bird bestBird;
@@ -45,7 +45,7 @@ class runBestBird extends JComponent{
         frame.pack(); // set frame size to content pane
 
         frame.setTitle("Flappy Bird");
-        //frame.setResizable(false); todo
+        frame.setResizable(false);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

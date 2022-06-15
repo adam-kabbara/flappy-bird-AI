@@ -2,7 +2,7 @@
 // We cannot serialize the Bird class as it contains a BufferedImage
 // So this class is used to save the important aspects of the best birds
 
-public class SerializedBird  implements java.io.Serializable{
+class SerializedBird  implements java.io.Serializable{
     Integer score;
     Integer pipeScore;
     NeuralNetwork brain;

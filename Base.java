@@ -3,8 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 
-
-public class Base extends JComponent{
+class Base extends JComponent{
     int x1;
     int x2;
     int y;

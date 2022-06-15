@@ -1,10 +1,9 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
 import javax.swing.*;
 
-public class Bird extends JComponent{
+class Bird extends JComponent{
     int x;
     int y;
     int width;

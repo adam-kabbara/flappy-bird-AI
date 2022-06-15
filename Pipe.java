@@ -4,8 +4,7 @@ import java.util.Random;
 import java.awt.image.BufferedImage;
 
 
-
-public class Pipe extends JComponent{
+class Pipe extends JComponent{
     int x;
     int topY;
     int bottomY;

@@ -13,7 +13,8 @@ import java.awt.event.WindowListener;
 import java.awt.event.WindowAdapter;
 import javax.swing.*;
  
-class mainWindow extends JComponent{
+
+public class mainWindow extends JComponent{
     private final int BIRD_COUNT = 100; //100
     final int WIDTH = 375;
     final int HEIGHT = 600;
@@ -21,7 +22,6 @@ class mainWindow extends JComponent{
     static JFrame frame = new JFrame();
     static Random rand = new Random();
     final String bestBirdFileName = "bestBird.ser";
-
 
     ArrayList<Bird> birds = new ArrayList<Bird>();
     ArrayList<Bird> deadBirds = new ArrayList<Bird>(); // lmao to access their BRAINNSSS
@@ -279,6 +279,7 @@ class mainWindow extends JComponent{
     // ------------------ AI STUFFFF ----------------------------------
 
     private Bird pickBirdMate(){
+        // this used to be the previous bird selection algorithm
         int randomIndex;
         this.deadBirds.sort((s1, s2) -> s1.score.compareTo(s2.score));
         // top 20% of birds with greater score are consider "superior"

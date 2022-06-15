@@ -1,7 +1,7 @@
 // A class for a 3 layered neural network
 import java.util.Random;
 
-public class NeuralNetwork implements java.io.Serializable{
+class NeuralNetwork implements java.io.Serializable{
     int inputCount;
     int hiddenCount;
     int outputCount;
